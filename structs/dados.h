@@ -31,8 +31,11 @@ void dados_set_nomeLinha(dados *d, char *nome);
 dados *dados_le_binario(FILE *binFile);
 void dados_grava_binario(dados *d, FILE *binFile);
 
-// Atualiza campos e verifica se deu Mathc
+// Atualiza campos e verifica se deu Match
 void dados_atualiza_campos(dados *d, int p_campos, char nomesCamposAtualiza[][50], char valoresAtualiza[][100]);
 int valida_registro(dados *d, int m_campos, char nomesCampos[][50], char valoresBusca[][100]);
+
+// Imprime a junção de dois registros
+void dados_printa_juncao(dados *trem1, dados *trem2);
 
 #endif

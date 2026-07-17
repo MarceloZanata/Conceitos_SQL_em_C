@@ -269,3 +269,23 @@ int valida_registro(dados *d, int m_campos, char nomesCampos[][50], char valores
     }
     return 1;
 }
+
+// @brief          Imprime os dados resultantes da junção de dois registros
+/// @param trem1    Ponteiro para o registro do loop externo (estação origem)
+/// @param trem2    Ponteiro para o registro do loop interno (próxima estação)
+void dados_printa_juncao(dados *trem1, dados *trem2) {
+    if (trem1 == NULL || trem2 == NULL) return;
+
+    // Tratamento de campos de texto nulos usando acesso direto à struct
+    char *strNomeEstacao = (trem1->nomeEstacao != NULL && trem1->tamNomeEstacao > 0) ? trem1->nomeEstacao : "NULO";
+    char *strNomeLinha = (trem1->nomeLinha != NULL && trem1->tamNomeLinha > 0) ? trem1->nomeLinha : "NULO";
+    char *strNomeProxEstacao = (trem2->nomeEstacao != NULL && trem2->tamNomeEstacao > 0) ? trem2->nomeEstacao : "NULO";
+
+    // Impressão formatada
+    printf("%d %s %s %d %s\n", 
+           trem1->codEstacao, 
+           strNomeEstacao, 
+           strNomeLinha, 
+           trem1->codProxEstacao, 
+           strNomeProxEstacao);
+}

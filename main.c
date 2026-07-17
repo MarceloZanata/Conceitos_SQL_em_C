@@ -11,12 +11,16 @@
 #include "./funcoes_principais/delete.h"
 #include "./funcoes_principais/insert_into.h"
 #include "./structs/arvore_b.h"
-#include "./funcoes_arvb/create_index.h"
+#include "./funcoes_principais/create_index.h"
+#include "./funcoes_principais/sort.h"
 
 int main()
 {
     int funcionalidade, n;
     char arqCsv[30], arqBin[30], arqBtree[30];
+
+    // Novas variáveis para armazenar os parâmetros das funcionalidades 11 e 12
+    char nomeCampo1[30], arqBin2[30], nomeCampo2[30], arqIndice[30];
 
     if (scanf("%d", &funcionalidade) != 1) return 0;
 
@@ -66,6 +70,24 @@ int main()
         case 10: 
             scanf("%s %s %d", arqBin, arqBtree, &n);
             DELETE_WHERE(arqBin, arqBtree, n);
+            break;
+        case 11:
+            scanf("%s %s %s %s", arqBin, nomeCampo1, arqBin2, nomeCampo2);
+            SELECT_ANINHADO(arqBin, nomeCampo1, arqBin2, nomeCampo2);
+            break;
+        case 12:
+            scanf("%s %s %s %s %s", arqBin, nomeCampo1, arqBin2, nomeCampo2, arqIndice);
+            SELECT_LOOP_UNICO(arqBin, nomeCampo1, arqBin2, nomeCampo2, arqIndice);
+            break;
+        case 13:
+            char arqEntrada[30], campoOrd[30], arqSaida[30];
+            scanf("%s %s %s", arqEntrada, campoOrd, arqSaida);
+            ordena_arquivo_ram(arqEntrada, campoOrd, arqSaida);
+            break;
+        case 14:
+            char arqEntrada1[30], campo1[30], arqEntrada2[30], campo2[30];
+            scanf("%s %s %s %s", arqEntrada1, campo1, arqEntrada2, campo2);
+            SELECT_SORT_MERGE(arqEntrada1, campo1, arqEntrada2, campo2);
             break;
         default:
             break;
