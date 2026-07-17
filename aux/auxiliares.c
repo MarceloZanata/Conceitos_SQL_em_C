@@ -1,9 +1,8 @@
+#include <string.h>
 #include "auxiliares.h"
 #include "../fornecidas/fornecidas.h"
-#include <string.h>
 
-/// @brief          Serve para ler o arquivo palavra por palavra, 
-///                 retornando 0 ou 1 que é conveniente para usar dentro de um loop
+/// @brief          Serve para ler o arquivo palavra por palavra
 /// @param file     Ponteiro para o arquivo na stack 
 /// @param buffer   Ponteiro para pegar a string contida no arquivo
 /// @return         Retorna 0 ao acabar o arquivo e 1 enquanto nao terminar a leitura do arquivo
@@ -89,6 +88,9 @@ FILE *abre_verifica_rbplus(char *nomeArqBin)
   return file;
 }
 
+/// @brief            Abre o arquivo, e efetua a verificação se foi possível abrir e a respeito da integridade.
+/// @param nomeArqBin Nome do arquivo a ser manipulado.
+/// @return           Retorna o ponteiro do arquivo.
 FILE *abre_verifica_wb(char *nomeArqBin)
 {
     FILE *file = fopen(nomeArqBin, "wb");
@@ -99,6 +101,9 @@ FILE *abre_verifica_wb(char *nomeArqBin)
   return file;
 }
 
+/// @brief            Abre o arquivo, e efetua a verificação se foi possível abrir e a respeito da integridade.
+/// @param nomeArqBin Nome do arquivo a ser manipulado.
+/// @return           Retorna o ponteiro do arquivo.
 FILE *abre_verifica_wbplus(char *nomeArqBin)
 {
     FILE *file = fopen(nomeArqBin, "wb+");

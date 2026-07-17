@@ -1,8 +1,8 @@
+#include <string.h>
+#include <stdlib.h>
 #include "calcula.h"
 #include "../structs/cabecalho.h"
 #include "../structs/dados.h"
-#include <string.h>
-#include <stdlib.h>
 
 /// @brief                  Calcula o número de estações únicas
 /// @param d                O array de ponteiros para as structs de dados
@@ -44,7 +44,7 @@ int calc_nroPares(dados **d, int totalRegistros)
         int codEstI = dados_get_codEstacao(d[i]);
         int codProxI = dados_get_codProxEstacao(d[i]);
 
-        // Se o código da estação ou da próxima for inválido (-1), não forma par
+        // Se o código da estação ou da próxima for inválido, não forma par
         if (codEstI == -1 || codProxI == -1) continue;
 
         int repetido = 0;
@@ -68,14 +68,14 @@ int calc_nroPares(dados **d, int totalRegistros)
 /// @param proxRRN  Próximo RRN
 void recalcula_e_grava_cabecalho(FILE *binFile, int topo, int proxRRN)
 {   
-    // Move o ponteiro para o início dos dados dos registros (pula os 17 bytes)
+    // Move o ponteiro para o início dos dados dos registros
     fseek(binFile, 17, SEEK_SET);
     
     dados **array_temp = NULL;
     int total_ativos = 0;
     dados *reg_atual = NULL;
 
-    // Lê o arquivo do início ao fim usando as permissões do TAD
+    // Lê o arquivo do início ao fim
     while ((reg_atual = dados_le_binario(binFile)) != NULL) 
     {
         if (dados_get_removido(reg_atual) == '0') {
@@ -100,7 +100,7 @@ void recalcula_e_grava_cabecalho(FILE *binFile, int topo, int proxRRN)
         free(array_temp); 
     }
 
-    // Aloca e monta o cabeçalho final atualizado
+    // Aloca e monta o cabeçalho atualizado
     cabecalho *cab = inicializaCabecalho();
     atualizaCabecalho(cab, '1', topo, proxRRN, nroEstacoes, nroParesEstacao);
     

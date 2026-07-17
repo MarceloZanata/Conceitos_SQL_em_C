@@ -66,3 +66,32 @@ void gravaCabecalho(FILE *binFile, cabecalho *c)
     fwrite(&c->nroEstacoes, sizeof(int), 1, binFile);
     fwrite(&c->nroParesEstacao, sizeof(int), 1, binFile);
 }
+
+/// @brief          Faz a leitura do cabeçalho do arquivo de dados
+/// @param binFile  Ponteiro para o arquivo binário de dados
+/// @return         Retorna um ponteiro do nosso objeto cabeçalho
+cabecalho *leCabecalhoDados(FILE *binFile)
+{   
+    cabecalho *c = inicializaCabecalho();
+    fseek(binFile, 0, SEEK_SET);
+    fread(&c->status, sizeof(char), 1, binFile);
+    fread(&c->topo, sizeof(int), 1, binFile);             
+    fread(&c->proxRRN, sizeof(int), 1, binFile);
+    fread(&c->nroEstacoes, sizeof(int), 1, binFile);
+    fread(&c->nroParesEstacao, sizeof(int), 1, binFile);
+    return c;
+}
+
+// Retorna dados especificos da struct
+char getStatusCabecalho(const cabecalho *c) { return c->status; }
+int getTopoCabecalho(const cabecalho *c) { return c->topo; }
+int getProxRRNCabecalho(const cabecalho *c) { return c->proxRRN; }
+int getNroEstacoesCabecalho(const cabecalho *c) { return c->nroEstacoes; }
+int getNroParesEstacaoCabecalho(const cabecalho *c) { return c->nroParesEstacao; }
+
+// Seta dados específicos da struct
+void setStatus(cabecalho *c, char status) { c->status = status; }
+void setTopo(cabecalho *c, int topo) { c->topo = topo; }
+void setProxRRN(cabecalho *c, int proxRRN) { c->proxRRN = proxRRN; }
+void setNroEstacoes(cabecalho *c, int nroEstacoes) { c->nroEstacoes = nroEstacoes; }
+void setNroParesEstacao(cabecalho *c, int nroParesEstacao) { c->nroParesEstacao = nroParesEstacao; }

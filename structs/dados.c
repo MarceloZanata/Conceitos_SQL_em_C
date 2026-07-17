@@ -1,7 +1,7 @@
-#include "dados.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dados.h"
 
 struct _dados {
     char removido;          // '0' para ativo, '1' para removido
@@ -47,7 +47,7 @@ void dados_apaga(dados *d) {
     free(d);
 }
 
-// --- GETTERS ---
+// Pega informações individualmente dos campos da struc dados
 char dados_get_removido(dados *d) { return d->removido; }
 int dados_get_proxRemovido(dados *d) { return d->proxRemovido; }
 int dados_get_codEstacao(dados *d) { return d->codEstacao; }
@@ -59,7 +59,16 @@ int dados_get_codEstIntegra(dados *d) { return d->codEstIntegra; }
 char *dados_get_nomeEstacao(dados *d) { return d->nomeEstacao; }
 char *dados_get_nomeLinha(dados *d) { return d->nomeLinha; }
 
-// --- SETTERS ---
+/// @brief                  Seta os campos fixos do objeto
+/// @param d                Ponteiro do objeto
+/// @param removido         status de removido
+/// @param proxRemovido     pŕoximo removido
+/// @param codEstacao       Código da estação atual
+/// @param codLinha         Código da linha que a estação pertence
+/// @param codProxEstacao   Código da próxima estação
+/// @param distProxEstacao  Distância
+/// @param codLinhaIntegra  Código da linha integra
+/// @param codEstIntegra    Código estacão integra
 void dados_set_campos_fixos(dados *d, char removido, int proxRemovido, int codEstacao, int codLinha, int codProxEstacao, int distProxEstacao, int codLinhaIntegra, int codEstIntegra) {
     if (!d) return;
     d->removido = removido;
@@ -72,7 +81,10 @@ void dados_set_campos_fixos(dados *d, char removido, int proxRemovido, int codEs
     d->codEstIntegra = codEstIntegra;
 }
 
-void dados_set_nomeEstacao(dados *d, const char *nome) {
+/// @brief      Seta o nome da Estação
+/// @param d    Ponteiro do objeto trem
+/// @param nome Nome da Estação
+void dados_set_nomeEstacao(dados *d, char *nome) {
     if (!d) return;
     if (d->nomeEstacao) free(d->nomeEstacao);
     
@@ -86,7 +98,10 @@ void dados_set_nomeEstacao(dados *d, const char *nome) {
     }
 }
 
-void dados_set_nomeLinha(dados *d, const char *nome) {
+/// @brief      Seta o noe da linha
+/// @param d    Ponteiro para o objeto trem
+/// @param nome Nome da linha
+void dados_set_nomeLinha(dados *d, char *nome) {
     if (!d) return;
     if (d->nomeLinha) free(d->nomeLinha);
     
@@ -100,7 +115,9 @@ void dados_set_nomeLinha(dados *d, const char *nome) {
     }
 }
 
-// --- ESCRITA EM BINÁRIO ---
+/// @brief          Grava os registros no arquivo de dados
+/// @param d        Ponteiro do objeto trem
+/// @param binFile  Ponteiro para o arquivo que será gravado
 void dados_grava_binario(dados *d, FILE *binFile) {
     if (!d || !binFile) return;
 
@@ -123,7 +140,7 @@ void dados_grava_binario(dados *d, FILE *binFile) {
         fwrite(d->nomeLinha, sizeof(char), d->tamNomeLinha, binFile);
     }
 
-    // Completa o registro com lixo '$' até dar 80 bytes
+    // Completa o registro com lixo $ até dar 80 bytes
     int bytesEscritos = 1 + 4 + (4 * 6) + 4 + d->tamNomeEstacao + 4 + d->tamNomeLinha;
     char lixo = '$';
     for (int k = 0; k < (80 - bytesEscritos); k++) {
@@ -131,14 +148,16 @@ void dados_grava_binario(dados *d, FILE *binFile) {
     }
 }
 
-// --- LEITURA DO BINÁRIO ---
+/// @brief          Lê o arquivo de dados
+/// @param binFile  Ponteiro para o arquivo de dados
+/// @return         O Ponteiro da struct contendo os dados lidos
 dados *dados_le_binario(FILE *binFile) {
     if (!binFile) return NULL;
 
     dados *d = dados_cria();
     if (!d) return NULL;
 
-    // Se falhar ao ler o primeiro char, atingiu o fim do arquivo
+    // Se falhar ao ler o status de removido, chegou ao fim do arquivo
     if (fread(&d->removido, sizeof(char), 1, binFile) != 1) {
         dados_apaga(d);
         return NULL;
@@ -173,6 +192,11 @@ dados *dados_le_binario(FILE *binFile) {
     return d;
 }
 
+/// @brief                      Atualiza os campos do objeto
+/// @param d                    Ponteiro para o objeto
+/// @param p_campos             Número de campos que serão atualizados
+/// @param nomesCamposAtualiza  Nomes dos campos a serem atualizados
+/// @param valoresAtualiza      Valores a serem atualizados
 void dados_atualiza_campos(dados *d, int p_campos, char nomesCamposAtualiza[][50], char valoresAtualiza[][100]) {
     if (!d) return;
 
@@ -200,7 +224,12 @@ void dados_atualiza_campos(dados *d, int p_campos, char nomesCamposAtualiza[][50
     }
 }
 
-// --- MATCH --- 
+/// @brief              Verifica se deu match do registro buscado
+/// @param d            Ponteiro para o objeto trem
+/// @param m_campos     M campos a serem validados
+/// @param nomesCampos  Nome dos campos
+/// @param valoresBusca Valores de busca 
+/// @return             Retorna 0 se não deu Match e 1 se deu Match
 int valida_registro(dados *d, int m_campos, char nomesCampos[][50], char valoresBusca[][100]) {
     for (int j = 0; j < m_campos; j++) {
         int valorInt_Buscado = (strcmp(valoresBusca[j], "NULO") == 0) ? -1 : atoi(valoresBusca[j]);
